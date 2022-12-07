@@ -26,7 +26,6 @@ COPY nginx /etc/nginx/
 
 COPY root_crontab /etc/crontabs/root
 
-COPY etc /usr/local/etc/
 COPY bin /usr/local/bin/
 RUN ln -s /usr/local/bin/update_pems /etc/periodic/daily
 COPY inittab /etc/inittab
