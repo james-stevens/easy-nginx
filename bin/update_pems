@@ -1,0 +1,20 @@
+#! /bin/sh
+
+changed=""
+
+apk add -u x-local-certs
+
+cd /opt/pems
+for file in *.pem
+do
+	dst="/etc/nginx/ca/${file}"
+	if test ${file} -nt ${dst} -o ! -f ${dst}
+		then
+			cp -a ${file} ${dst}
+			chown nginx: ${dst}
+			chmod 400 ${dst}
+			changed="Y"
+		fi
+done
+
+if test "${changed}"; then killall -HUP nginx; fi

@@ -1,0 +1,40 @@
+#! /bin/sh
+
+dst="/run/nginx/proxy.conf"
+src="/usr/local/etc/nginx.input"
+
+if ! test -f ${src}; then touch ${dst}; exit 0; fi
+if test -f ${dst} -a ! ${src} -nt ${dst}; then exit 0; fi
+
+rm -f ${dst}.tmp
+
+awk '{
+	if ($1=="P") {
+		printf "\tserver {\n\t\tlisten 443 ssl;\n"
+		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
+		printf "\t\tlocation / {\n\t\t\tproxy_pass %s;\n\t\t}\n",$3
+		printf "\t\tssl_certificate /etc/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate_key /etc/nginx/ca/%s.pem;\n",$2
+		print "\t\tssl_session_cache    shared:SSL:1m;"
+		print "\t\tssl_session_timeout  5m;"
+		print "\t\tssl_ciphers  HIGH:!aNULL:!MD5;"
+		print "\t\tssl_prefer_server_ciphers  on;"
+		print "\t}"
+		}
+
+	if ($1=="R") {
+		printf "\tserver {\n\t\tlisten 443 ssl;\n"
+		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
+		printf "\t\treturn 301 %s;\n",$3
+		printf "\t\tssl_certificate /etc/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate_key /etc/nginx/ca/%s.pem;\n",$2
+		print "\t\tssl_session_cache    shared:SSL:1m;"
+		print "\t\tssl_session_timeout  5m;"
+		print "\t\tssl_ciphers  HIGH:!aNULL:!MD5;"
+		print "\t\tssl_prefer_server_ciphers  on;"
+		print "\t}"
+		}
+
+	}' ${src} > ${dst}.tmp
+
+mv ${dst}.tmp ${dst}
