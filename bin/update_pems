@@ -4,7 +4,7 @@ changed=""
 
 apk add -u x-local-certs
 
-cd /opt/pems
+cd /var/lib/pems
 for file in *.pem
 do
 	dst="/etc/nginx/ca/${file}"

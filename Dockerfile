@@ -1,10 +1,10 @@
 # (c) Copyright 2019-2022, JRCS Ltd ... see LICENSE for details
 # Alternative license arrangements are possible, contact me for more information
 
-FROM alpine:3.16
+FROM alpine:3.18
 
 COPY apk/repositories apk/repositories.new /etc/apk/
-COPY apk/github@jrcs.net-5ff32a63.rsa.pub /etc/apk/keys/
+COPY apk/github@jrcs.net-6630b66f.rsa.pub /etc/apk/keys/
 
 RUN apk update
 RUN apk upgrade
