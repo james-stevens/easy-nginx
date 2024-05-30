@@ -12,7 +12,11 @@ awk '{
 	if ($1=="P") {
 		printf "\tserver {\n\t\tlisten 443 ssl;\n"
 		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
-		printf "\t\tlocation / {\n\t\t\tproxy_pass %s;\n\t\t}\n",$3
+		print "\t\tlocation / {"
+		printf "\t\t\tproxy_pass %s;\n",$3
+		print "\t\tproxy_set_header Host            $host;"
+		print "\t\tproxy_set_header X-Forwarded-For $remote_addr;"
+		printf "\t\t}\n"
 		printf "\t\tssl_certificate /etc/nginx/ca/%s.pem;\n",$2
 		printf "\t\tssl_certificate_key /etc/nginx/ca/%s.pem;\n",$2
 		print "\t\tssl_session_cache    shared:SSL:1m;"
