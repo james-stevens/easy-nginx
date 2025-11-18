@@ -1,1 +1,4 @@
+#! /bin/sh
+
+date +%Y%m%d.%H%M > build.txt
 docker image build $* -t easy-nginx .

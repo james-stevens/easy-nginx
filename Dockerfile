@@ -1,7 +1,7 @@
 # (c) Copyright 2019-2022, JRCS Ltd ... see LICENSE for details
 # Alternative license arrangements are possible, contact me for more information
 
-FROM alpine:3.18
+FROM alpine:3.22
 
 COPY apk/repositories apk/repositories.new /etc/apk/
 COPY apk/github@jrcs.net-6630b66f.rsa.pub /etc/apk/keys/
@@ -35,4 +35,5 @@ RUN mkdir /opt/htdocs /opt/cgi-bin
 RUN mv /etc/apk/repositories.new /etc/apk/repositories
 RUN apk update
 
+COPY build.txt /usr/local/etc/build.txt
 CMD [ "/sbin/init" ]
