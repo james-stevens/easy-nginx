@@ -1,9 +1,13 @@
 #! /bin/sh
 
-mkdir -p /run/nginx /run/nginx/ca
-chown nginx: /run/nginx /run/nginx/ca
+cp -a /usr/local/nginx/ /run
+mkdir /run/nginx/ca
+chmod 700 /run/nginx
+chown -R nginx: /run/nginx
 
 /usr/local/bin/update_pems
 /usr/local/bin/remake_conf
 
-exec /usr/sbin/nginx -c /etc/nginx/nginx.conf -g "daemon off;" >/tmp/nginx.log 2>&1
+/usr/sbin/nginx -t -c /run/nginx/nginx.conf
+
+exec /usr/sbin/nginx -c /run/nginx/nginx.conf -g "daemon off;" >/tmp/nginx.log 2>&1

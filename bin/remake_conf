@@ -19,8 +19,8 @@ awk '{
 			print "\t\tproxy_set_header X-Forwarded-For $remote_addr;"
 			}
 		printf "\t\t}\n"
-		printf "\t\tssl_certificate /etc/nginx/ca/%s.pem;\n",$2
-		printf "\t\tssl_certificate_key /etc/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate /run/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate_key /run/nginx/ca/%s.pem;\n",$2
 		print "\t\tssl_session_cache    shared:SSL:1m;"
 		print "\t\tssl_session_timeout  5m;"
 		print "\t\tssl_ciphers  HIGH:!aNULL:!MD5;"
@@ -32,8 +32,8 @@ awk '{
 		printf "\tserver {\n\t\tlisten 443 ssl;\n"
 		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
 		printf "\t\treturn 301 %s;\n",$3
-		printf "\t\tssl_certificate /etc/nginx/ca/%s.pem;\n",$2
-		printf "\t\tssl_certificate_key /etc/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate /run/nginx/ca/%s.pem;\n",$2
+		printf "\t\tssl_certificate_key /run/nginx/ca/%s.pem;\n",$2
 		print "\t\tssl_session_cache    shared:SSL:1m;"
 		print "\t\tssl_session_timeout  5m;"
 		print "\t\tssl_ciphers  HIGH:!aNULL:!MD5;"

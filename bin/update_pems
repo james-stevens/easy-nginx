@@ -1,16 +1,15 @@
 #! /bin/sh
 
-apk add -u x-local-certs
-
-src="/var/lib/pems"
-dst="/etc/nginx/ca/"
+src="/opt/data/pems"
+dst="/run/nginx/ca/"
+mkdir -p ${dst}
 
 for file in ${src}/*.pem
 do
 	if test ${file} -nt ${dst}/${file} -o ! -f ${dst}/${file}
 		then
 			cp -a ${src}/*.pem ${dst}
-			chown -Rnginx: ${dst}
+			chown -R nginx: ${dst}
 			chmod 400 ${dst}/*
 			killall -HUP nginx
 			exit 0

@@ -1,7 +1,9 @@
 #! /bin/sh
 
 exec docker run \
+	--read-only \
+	-v /var/lib/pems:/opt/data/pems \
 	-v /usr/local/etc/nginx.input:/usr/local/etc/nginx.input \
-	-p 192.168.1.144:443:443 \
-	-p 192.168.1.144:80:80 \
+	-p 192.168.1.145:443:443 \
+	-p 192.168.1.145:80:80 \
 	-it easy-nginx $1
