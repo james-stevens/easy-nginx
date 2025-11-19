@@ -8,6 +8,12 @@ chown -R nginx: /run/nginx
 /usr/local/bin/update_pems
 /usr/local/bin/remake_conf
 
-/usr/sbin/nginx -t -c /run/nginx/nginx.conf
+conf="/run/nginx/nginx.conf"
+if test "${NGINX_NO_LOGGING}" = "Y"
+	then
+		conf="/run/nginx/nolog.conf"
+	fi
 
-exec /usr/sbin/nginx -c /run/nginx/nginx.conf -g "daemon off;" >/tmp/nginx.log 2>&1
+/usr/sbin/nginx -t -c ${conf}
+
+exec /usr/sbin/nginx -c ${conf} -g "daemon off;" >/tmp/nginx.log 2>&1
