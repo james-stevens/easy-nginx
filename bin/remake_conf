@@ -8,12 +8,29 @@ if test -f ${dst} -a ! ${src} -nt ${dst}; then exit 0; fi
 
 rm -f ${dst}.tmp
 
+
+{
 awk '{
+    if (index($3,"|") > 0) {
+		n = split($3,x,"|");
+		un = split(x[1],ux,"/")
+		printf("upstream %s {\n",ux[3])
+		for(l=2;l<=n;l++) printf("\tserver %s;\n",x[l])
+		print("\t}\n")
+		}
+	}' ${src}
+
+awk '{
+	if (index($3,"|") > 0) {
+		n = split($3,x,"|");
+		dst=x[1]
+		} else dst = $3
+
 	if (($1=="X")||($1=="P")) {
 		printf "\tserver {\n\t\tlisten 443 ssl;\n"
 		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
 		print "\t\tlocation / {"
-		printf "\t\t\tproxy_pass %s;\n",$3
+		printf "\t\t\tproxy_pass %s;\n",dst
 		if ($1=="P") {
 			print "\t\tproxy_set_header Host            $host;"
 			print "\t\tproxy_set_header X-Forwarded-For $remote_addr;"
@@ -31,7 +48,7 @@ awk '{
 	if ($1=="R") {
 		printf "\tserver {\n\t\tlisten 443 ssl;\n"
 		for(l=4;l<=NF;l++) printf "\t\tserver_name %s;\n",$l
-		printf "\t\treturn 301 %s;\n",$3
+		printf "\t\treturn 301 %s;\n",dst
 		printf "\t\tssl_certificate /run/nginx/ca/%s.pem;\n",$2
 		printf "\t\tssl_certificate_key /run/nginx/ca/%s.pem;\n",$2
 		print "\t\tssl_session_cache    shared:SSL:1m;"
@@ -41,6 +58,8 @@ awk '{
 		print "\t}"
 		}
 
-	}' ${src} > ${dst}.tmp
+	}' ${src}
+
+} > ${dst}.tmp
 
 mv ${dst}.tmp ${dst}

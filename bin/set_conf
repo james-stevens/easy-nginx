@@ -1,0 +1,11 @@
+#! /bin/sh
+
+conf="/run/nginx/nginx.conf"
+if test "${NGINX_NO_LOGGING}" = "Y"
+	then
+		conf="/run/nginx/nolog.conf"
+	fi
+if test "${NGINX_PLAIN_WEB}" = "Y"
+	then
+		conf="/run/nginx/plain.conf"
+	fi

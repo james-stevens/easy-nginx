@@ -5,14 +5,14 @@ mkdir /run/nginx/ca
 chmod 700 /run/nginx
 chown -R nginx: /run/nginx
 
+mkdir /opt/data/htdocs
+chown -R nginx: /opt/data/htdocs
+chmod 755 /opt/data/htdocs
+
 /usr/local/bin/update_pems
 /usr/local/bin/remake_conf
 
-conf="/run/nginx/nginx.conf"
-if test "${NGINX_NO_LOGGING}" = "Y"
-	then
-		conf="/run/nginx/nolog.conf"
-	fi
+. /usr/local/bin/set_conf
 
 /usr/sbin/nginx -t -c ${conf}
 

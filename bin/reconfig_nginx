@@ -1,0 +1,10 @@
+#! /bin/sh
+
+/usr/local/bin/remake_conf
+
+. /usr/local/bin/set_conf
+
+if nginx -t -c ${conf}
+	then
+		killall -HUP nginx
+	fi

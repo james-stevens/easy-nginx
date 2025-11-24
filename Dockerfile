@@ -5,6 +5,9 @@ FROM alpine:3.22
 RUN apk update
 RUN apk upgrade
 
+RUN addgroup -g 850 -S nginx
+RUN adduser -u 850 -S -h /dev/null -G nginx nginx
+
 RUN apk add nginx
 
 RUN rm -r /run
@@ -21,8 +24,6 @@ COPY nginx /usr/local/nginx
 COPY root_crontab /etc/crontabs/root
 COPY bin /usr/local/bin/
 COPY inittab /etc/inittab
-
-RUN mkdir /opt/htdocs /opt/cgi-bin
 
 COPY build.txt /usr/local/etc/build.txt
 CMD [ "/sbin/init" ]

@@ -2,7 +2,8 @@
 
 exec docker run \
 	--read-only \
-	--env NGINX_NO_LOGGING=Y \
+	--env NGINX_NO_LOGGING=N \
+	--env NGINX_PLAIN_WEB=Y \
 	-v /opt/data/easy-nginx:/opt/data \
 	-v /var/lib/pems:/opt/data/pems \
 	-p 192.168.1.145:443:443 \
